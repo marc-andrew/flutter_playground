@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Screens
+// CupertinoPicker Example
 import 'package:flutter_playground/ios/cupertino_picker.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           Center(
             child: RaisedButton(
-              child: Text('Cupertino Picker Example'),
+              child: Text('CupertinoPicker Example'),
               onPressed: () {
                 // Navigate to the new screen
                 Navigator.push(
