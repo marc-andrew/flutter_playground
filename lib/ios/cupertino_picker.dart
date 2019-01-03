@@ -1,6 +1,17 @@
+/// This example will show you how to build
+/// two CupertinoPicker next to each other.
+/// You can also increase it by three or four.
+/// If you are looking for a Date picker or
+/// a Time picker please check Flutter's site
+/// https://flutter.io/docs/development/ui/widgets/cupertino
+///
+/// However, if you are thinking to build a custom
+/// picker you can see below how to archive it.
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+// The height for the bottom picker sheet
 const double _kPickerSheetHeight = 216.0;
 
 class CupertinoPickerScreen extends StatefulWidget {
@@ -10,11 +21,13 @@ class CupertinoPickerScreen extends StatefulWidget {
 }
 
 class _CupertinoPickerScreenScreenState extends State<CupertinoPickerScreen> {
+  // Initial controller
   final FixedExtentScrollController _controllerA =
       FixedExtentScrollController(initialItem: 0);
   final FixedExtentScrollController _controllerB =
       FixedExtentScrollController(initialItem: 0);
 
+  // Open CupertinoPicker on button pressed
   void _onButtonPressed() {
     showCupertinoModalPopup<void>(
       context: context,
