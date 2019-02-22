@@ -36,26 +36,44 @@ class _PlatformHomepageState extends State<PlatformHomepage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-//      body: _buildBody(context),
-      ios: (_)=> CupertinoPageScaffoldData(
-        tabBuilder: (BuildContext context, int index) {
-          switch(index) {
-            case 1:
-              return Page2();
-              break;
-            case 2:
-              return Page3();
-              break;
-            default:
-              return Page1();
-          }
-        }
-      ),
-      bottomNavBar: PlatformNavBar(
-        onTap: _onNavPressed,
-        currentIndex: _currentIndex,
-        items: <BottomNavigationBarItem>[
+//    return PlatformScaffold(
+////      body: _buildBody(context),
+//      ios: (_)=> CupertinoPageScaffoldData(
+//        tabBuilder: (BuildContext context, int index) {
+//          switch(index) {
+//            case 1:
+//              return Page2();
+//              break;
+//            case 2:
+//              return Page3();
+//              break;
+//            default:
+//              return Page1();
+//          }
+//        }
+//      ),
+//      bottomNavBar: PlatformNavBar(
+//        onTap: _onNavPressed,
+//        currentIndex: _currentIndex,
+//        items: <BottomNavigationBarItem>[
+//          BottomNavigationBarItem(
+//            icon: Icon(CupertinoIcons.home),
+//            title: Text('Home'),
+//          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(CupertinoIcons.conversation_bubble),
+//            title: Text('Support'),
+//          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(CupertinoIcons.profile_circled),
+//            title: Text('Profile'),
+//          ),
+//        ],
+//      ),
+//    );
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.home),
             title: Text('Home'),
@@ -70,6 +88,29 @@ class _PlatformHomepageState extends State<PlatformHomepage> {
           ),
         ],
       ),
+      tabBuilder: (BuildContext context, int index) {
+        switch (index) {
+          case 0:
+            return CupertinoTabView(
+              builder: (BuildContext context) => Page1(),
+              defaultTitle: 'Colors',
+            );
+            break;
+          case 1:
+            return CupertinoTabView(
+              builder: (BuildContext context) => Page2(),
+              defaultTitle: 'Support Chat',
+            );
+            break;
+          case 2:
+            return CupertinoTabView(
+              builder: (BuildContext context) => Page3(),
+              defaultTitle: 'Account',
+            );
+            break;
+        }
+        return null;
+      },
     );
   }
 }
@@ -102,6 +143,9 @@ class Page2 extends StatelessWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text('Support'),
+//        ios: (_)=> CupertinoAppBarData(
+//          transitionBetweenRoutes: false,
+//        ),
       ),
       body: Center(
         child: PlatformButton(

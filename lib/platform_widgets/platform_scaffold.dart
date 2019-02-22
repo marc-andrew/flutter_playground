@@ -101,7 +101,10 @@ class PlatformScaffold extends PlatformWidget<Widget, Scaffold> {
       );
     }
 
-    return child;
+    return Material(
+      elevation: 0.0,
+      child: child,
+    );
   }
 
   @override
