@@ -85,8 +85,8 @@ class PlatformButton extends PlatformWidget<CupertinoButton, FlatButton> {
       {Key key,
         @required this.child,
         @required this.onPressed,
-        this.color = Colors.blue,
-        this.disabledColor = Colors.grey,
+        this.color ,
+        this.disabledColor,
         this.padding = const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 11.0),
         this.android,
         this.ios})
@@ -132,13 +132,13 @@ class PlatformButton extends PlatformWidget<CupertinoButton, FlatButton> {
       padding: data?.padding ?? padding,
       color: data?.color ?? color,
       disabledColor: data?.disabledColor ?? disabledColor,
-      highlightColor: data?.highlightColor ?? Colors.transparent,
-      splashColor: data?.splashColor ?? Colors.transparent,
+      highlightColor: data?.highlightColor,
+      splashColor: data?.splashColor,
       onPressed: data?.onPressed ?? onPressed,
       onHighlightChanged: data?.onHighlightChanged,
       textTheme: data?.textTheme,
       textColor: data?.textColor,
-      disabledTextColor: data?.disabledTextColor ?? Colors.black45,
+      disabledTextColor: data?.disabledTextColor,
       colorBrightness: data?.colorBrightness,
       shape: data?.shape ??
           RoundedRectangleBorder(

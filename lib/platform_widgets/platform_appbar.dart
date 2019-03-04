@@ -4,13 +4,11 @@ import 'package:flutter/cupertino.dart';
 // Widgets
 import 'platform_widget.dart';
 
-//the default has alpha which will cause the content to slide under the header for ios
-const Color _kDefaultNavBarBorderColor = const Color(0x4C000000);
 
 const Border _kDefaultNavBarBorder = const Border(
   bottom: const BorderSide(
-    color: _kDefaultNavBarBorderColor,
-    width: 0.0, // One physical pixel.
+    color: Color(0x4C000000),
+    width: 1.0, // One physical pixel.
     style: BorderStyle.solid,
   ),
 );
@@ -103,7 +101,7 @@ class PlatformAppBar
   PlatformAppBar({
     Key key,
     this.title,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.leading,
     this.actions,
     this.automaticallyImplyLeading = true,
@@ -144,13 +142,7 @@ class PlatformAppBar
         automaticallyImplyMiddle: data?.automaticallyImplyMiddle ?? true,
         previousPageTitle: data?.previousPageTitle,
         padding: data?.padding,
-        border: data?.border ??
-            Border(
-              bottom: const BorderSide(
-                width: 1.0,
-                color: Colors.grey,
-              ),
-            ),
+        border: data?.border ?? _kDefaultNavBarBorder,
         leading: data?.leading ?? leading,
         trailing: data?.trailing ?? trailing,
         transitionBetweenRoutes: data?.transitionBetweenRoutes ?? true,
@@ -161,9 +153,10 @@ class PlatformAppBar
     return CupertinoNavigationBar(
       middle: data?.title ?? title,
       backgroundColor: data?.backgroundColor ?? backgroundColor,
-      actionsForegroundColor: data?.actionsForegroundColor,
+      actionsForegroundColor:
+      data?.actionsForegroundColor,
       automaticallyImplyLeading:
-      data?.automaticallyImplyLeading ?? automaticallyImplyLeading,
+      data?.automaticallyImplyLeading ?? automaticallyImplyLeading ?? true,
       automaticallyImplyMiddle: data?.automaticallyImplyMiddle ?? true,
       previousPageTitle: data?.previousPageTitle,
       padding: data?.padding,
@@ -190,7 +183,7 @@ class PlatformAppBar
       data?.automaticallyImplyLeading ?? automaticallyImplyLeading,
       bottomOpacity: data?.bottomOpacity ?? 1.0,
       brightness: data?.brightness,
-      centerTitle: data?.centerTitle,
+      centerTitle: data?.centerTitle ?? true,
       elevation: data?.elevation ?? 0.5,
       flexibleSpace: data?.flexibleSpace,
       iconTheme: data?.iconTheme,

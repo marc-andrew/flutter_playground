@@ -1,13 +1,27 @@
-import 'dart:io';
-import 'package:flutter/widgets.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+// Platform Widgets
+import 'package:flutter_playground/platform_widgets/platform.dart';
+import 'package:flutter_playground/platform_widgets/platform_app.dart';
 import 'package:flutter_playground/platform_widgets/platform_appbar.dart';
+import 'package:flutter_playground/platform_widgets/platform_backbutton.dart';
 import 'package:flutter_playground/platform_widgets/platform_button.dart';
-import 'package:flutter_playground/platform_widgets/platform_navbar.dart';
+import 'package:flutter_playground/platform_widgets/platform_closebutton.dart';
+import 'package:flutter_playground/platform_widgets/platform_iconbutton.dart';
+import 'package:flutter_playground/platform_widgets/platform_routing.dart';
 import 'package:flutter_playground/platform_widgets/platform_scaffold.dart';
-import 'package:flutter_playground/widgets/material_tabscaffold.dart';
+import 'package:flutter_playground/platform_widgets/platform_switch.dart';
+
+class PlatformPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return PlatformApp(
+      title: 'Platform Example',
+      home: PlatformHomepage(),
+    );
+  }
+}
 
 class PlatformHomepage extends StatefulWidget {
   @override
@@ -15,130 +29,154 @@ class PlatformHomepage extends StatefulWidget {
 }
 
 class _PlatformHomepageState extends State<PlatformHomepage> {
-  int _currentIndex = 0;
+  int _currentPage = 0;
 
-  void _onNavPressed(int index) {
-//    setState(() {
-//      _currentIndex = index;
-//    });
-
-    print('Pressed');
-  }
-
-  Widget _buildBody(BuildContext context) {
-    switch(_currentIndex) {
-      case 1:
-        return Page2();
-        break;
-      case 2:
-        return Page3();
-        break;
-      default:
-        return Page1();
-    }
+  // Build AppBar Title
+  Widget _buildAppBarTitle(BuildContext context, String title) {
+    return Text(
+      '$title'.toUpperCase(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Material(
-      elevation: 0.0,
-      child: MaterialTabScaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.home),
-              title: Text('Home'),
-
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.conversation_bubble),
-              title: Text('Support'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.profile_circled),
-              title: Text('Profile'),
-            ),
-          ],
-        ),
-        tabBuilder: (BuildContext context, int index) {
-          print(index);
-        },
+    // AppBar List
+    List<PlatformAppBar> _appBar = [
+      PlatformAppBar(
+        title: _buildAppBarTitle(context, 'Home'),
+        actions: <Widget>[
+          PlatformIconButton(
+            onPressed: () {
+              print('Search pressed');
+            },
+            iconData: Icons.search,
+            tooltip: 'Search',
+          ),
+        ],
       ),
-    );
+      PlatformAppBar(
+        title: _buildAppBarTitle(context, 'Support'),
+        actions: <Widget>[
+          PlatformIconButton(
+            onPressed: () {
+              print('Menu pressed');
+            },
+            iconData: Icons.more_horiz,
+            tooltip: 'Menu',
+          ),
+        ],
+      ),
+      PlatformAppBar(
+        title: _buildAppBarTitle(context, 'Profile'),
+        actions: <Widget>[
+          PlatformIconButton(
+            onPressed: () {
+              print('Settings pressed');
+            },
+            iconData: Icons.settings,
+            tooltip: 'Settings',
+          ),
+        ],
+      ),
+    ];
 
-//    if(Platform.isIOS) {
-//      return CupertinoTabScaffold(
-//        tabBar: CupertinoTabBar(
-//          items: const <BottomNavigationBarItem>[
-//            BottomNavigationBarItem(
-//              icon: Icon(CupertinoIcons.home),
-//              title: Text('Home'),
-//
-//            ),
-//            BottomNavigationBarItem(
-//              icon: Icon(CupertinoIcons.conversation_bubble),
-//              title: Text('Support'),
-//            ),
-//            BottomNavigationBarItem(
-//              icon: Icon(CupertinoIcons.profile_circled),
-//              title: Text('Profile'),
-//            ),
-//          ],
-//        ),
-//        tabBuilder: (BuildContext context, int index) {
-//          switch (index) {
-//            case 0:
-//              return CupertinoTabView(
-//                builder: (BuildContext context) => Page1(),
-//                defaultTitle: 'Colors',
-//              );
-//              break;
-//            case 1:
-//              return CupertinoTabView(
-//                builder: (BuildContext context) => Page2(),
-//                defaultTitle: 'Support Chat',
-//              );
-//              break;
-//            case 2:
-//              return CupertinoTabView(
-//                builder: (BuildContext context) => Page3(),
-//                defaultTitle: 'Account',
-//              );
-//              break;
-//          }
-//          return null;
-//        },
-//      );
-//    } else if(Platform.isAndroid) {
-////      return Scaffold(
-////        appBar: ,
-////      );
-//    }
-//
-//    return throw new UnsupportedError('This platform is not supported: ' + Platform.operatingSystem);
+    // Body
+    List<Widget> _body = [
+      Page1(),
+      Page2(),
+      Page3(),
+    ];
 
+    // Navigation Bar Items
+    List<BottomNavigationBarItem> _bottomNavBarItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        title: Text('Home'),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.chat_bubble_outline),
+        title: Text('Home'),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person_outline),
+        title: Text('Profile'),
+      ),
+    ];
+
+    if (isIos) {
+      return CupertinoTabScaffold(
+          tabBar: CupertinoTabBar(
+            currentIndex: _currentPage,
+            iconSize: 24.0,
+            backgroundColor: Colors.white,
+            activeColor: Colors.black,
+            inactiveColor: Colors.grey,
+            items: _bottomNavBarItems,
+            onTap: (int i) {
+              _currentPage = i;
+            },
+          ),
+          tabBuilder: (BuildContext context, int i) {
+            switch (i) {
+              case 0:
+                return CupertinoTabView(
+                  builder: (BuildContext context) => PlatformScaffold(
+                        appBar: _appBar[i],
+                        body: _body[i],
+                      ),
+                  defaultTitle: 'Home',
+                );
+                break;
+              case 1:
+                return CupertinoTabView(
+                  builder: (BuildContext context) => PlatformScaffold(
+                        appBar: _appBar[i],
+                        body: _body[i],
+                      ),
+                  defaultTitle: 'Support',
+                );
+                break;
+              case 2:
+                return CupertinoTabView(
+                  builder: (BuildContext context) => PlatformScaffold(
+                        appBar: _appBar[i],
+                        body: _body[i],
+                      ),
+                  defaultTitle: 'Profile',
+                );
+                break;
+            }
+          });
+    } else if (isAndroid) {
+      return PlatformScaffold(
+        appBar: _appBar[_currentPage],
+        body: _body[_currentPage],
+        android: (_) => MaterialScaffoldData(
+              bottomNavBar: BottomNavigationBar(
+                currentIndex: _currentPage,
+                iconSize: 24.0,
+                items: _bottomNavBarItems,
+                type: BottomNavigationBarType.fixed,
+                fixedColor: Colors.black,
+                onTap: (int i) {
+                  setState(() {
+                    _currentPage = i;
+                  });
+                },
+              ),
+            ),
+      );
+    }
+
+    return throw new UnsupportedError('This platform is not supported.');
   }
 }
 
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text('home'),
-      ),
-      body: Center(
-        child: PlatformButton(
-          onPressed: () {
-            Navigator.of(context, rootNavigator: false).push(
-                CupertinoPageRoute<bool>(
-                    fullscreenDialog: false,
-                    builder: (BuildContext context) => ChatScreen()));
-          },
-          child: Text('Open New Screen'),
-        ),
-      ),
+    return Center(
+      child: Text('Home'),
     );
   }
 }
@@ -146,23 +184,15 @@ class Page1 extends StatelessWidget {
 class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text('Support'),
-//        ios: (_)=> CupertinoAppBarData(
-//          transitionBetweenRoutes: false,
-//        ),
-      ),
-      body: Center(
-        child: PlatformButton(
-          onPressed: () {
-            Navigator.of(context, rootNavigator: false).push(
-                CupertinoPageRoute<bool>(
-                    fullscreenDialog: false,
-                    builder: (BuildContext context) => ChatScreen()));
-          },
-          child: Text('Open New Screen'),
-        ),
+    return Center(
+      child: PlatformButton(
+        child: Text('Go to Fullscreen'),
+        onPressed: () {
+          Navigator.push(
+              context,
+              platformPageRoute(
+                  fullscreenDialog: true, builder: (context) => SupportScreen()));
+        },
       ),
     );
   }
@@ -171,27 +201,85 @@ class Page2 extends StatelessWidget {
 class Page3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text('Profile'),
-      ),
-      body: Center(
-        child: Text('Body'),
+    return Center(
+      child: PlatformButton(
+        child: Text('Go to Profile Screen'),
+        onPressed: () {
+          Navigator.push(
+              context,
+              platformPageRoute(builder: (context) => ProfileScreen()));
+        },
       ),
     );
   }
 }
 
-class ChatScreen extends StatelessWidget {
+class SupportScreen extends StatefulWidget {
+  @override
+  _SupportScreenState createState() => _SupportScreenState();
+}
+
+class _SupportScreenState extends State<SupportScreen> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text('New Page'),
+        leading: PlatformCloseButton(
+          onPressed: () { Navigator.pop(context); },
+        ),
+        title: Text(
+          'Support Fullscreen',
+        ),
       ),
       body: Center(
-        child: Text('Body'),
+        child: Text('Hello'),
       ),
     );
   }
 }
+
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _notifications = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        leading: PlatformBackButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'Profile Screen',
+        ),
+        ios: (_)=> CupertinoAppBarData(
+          padding: EdgeInsetsDirectional.only(start: 0.0),
+        )
+      ),
+      body: Center(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text('Notifications'),
+            ),
+            PlatformSwitch(
+              value: _notifications,
+              onChanged: (bool value) {
+                setState(() {
+                  _notifications = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

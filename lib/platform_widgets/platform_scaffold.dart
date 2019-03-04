@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 // Widgets
 import 'platform_widget.dart';
 import 'platform_appbar.dart';
-import 'platform_navbar.dart';
 
 abstract class _BaseData {
   _BaseData({this.backgroundColor, this.body});
@@ -19,12 +18,10 @@ class CupertinoPageScaffoldData extends _BaseData {
     Widget body,
     this.navigationBar,
     this.resizeToAvoidBottomInset,
-    this.tabBuilder,
   }) : super(backgroundColor: backgroundColor, body: body);
 
   final ObstructingPreferredSizeWidget navigationBar;
   final bool resizeToAvoidBottomInset;
-  final IndexedWidgetBuilder tabBuilder;
 }
 
 class MaterialScaffoldData extends _BaseData {
@@ -62,7 +59,6 @@ class PlatformScaffold extends PlatformWidget<Widget, Scaffold> {
     Key key,
     this.appBar,
     this.body,
-    this.bottomNavBar,
     this.backgroundColor,
     this.android,
     this.ios,
@@ -70,7 +66,6 @@ class PlatformScaffold extends PlatformWidget<Widget, Scaffold> {
 
   final PlatformAppBar appBar;
   final Widget body;
-  final PlatformNavBar bottomNavBar;
   final Color backgroundColor;
   final PlatformBuilder<MaterialScaffoldData> android;
   final PlatformBuilder<CupertinoPageScaffoldData> ios;
@@ -82,28 +77,15 @@ class PlatformScaffold extends PlatformWidget<Widget, Scaffold> {
       data = ios(context);
     }
 
-    Widget child;
-
-    if(bottomNavBar != null) {
-      var tabBar = bottomNavBar.buildCupertinoWidget(context);
-
-      child = CupertinoTabScaffold(
-        tabBar: tabBar,
-        tabBuilder: data?.tabBuilder,
-      );
-
-    } else {
-      child = CupertinoPageScaffold(
-        backgroundColor: data?.backgroundColor ?? backgroundColor,
-        navigationBar: data?.navigationBar ?? appBar?.buildCupertinoWidget(context),
-        child: data?.body ?? body,
-        resizeToAvoidBottomInset: data?.resizeToAvoidBottomInset ?? true,
-      );
-    }
-
     return Material(
       elevation: 0.0,
-      child: child,
+      child: CupertinoPageScaffold(
+        backgroundColor: data?.backgroundColor ?? backgroundColor,
+        navigationBar:
+        data?.navigationBar ?? appBar?.buildCupertinoWidget(context),
+        child: data?.body ?? body,
+        resizeToAvoidBottomInset: data?.resizeToAvoidBottomInset ?? true,
+      ),
     );
   }
 
@@ -118,7 +100,7 @@ class PlatformScaffold extends PlatformWidget<Widget, Scaffold> {
       backgroundColor: data?.backgroundColor ?? backgroundColor,
       appBar: appBar?.buildAndroidWidget(context),
       body: data?.body ?? body,
-      bottomNavigationBar: data?.bottomNavBar ?? bottomNavBar.buildAndroidWidget(context),
+      bottomNavigationBar: data?.bottomNavBar,
       drawer: data?.drawer,
       endDrawer: data?.endDrawer,
       floatingActionButton: data?.floatingActionButton,
